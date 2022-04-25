@@ -14,7 +14,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y)
 
-        const imageScale=1/8;
+        const imageScale = 1 / 8;
         // const imageScale=0.25;
 
         // create the flames and play the animation
@@ -27,7 +27,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
 
         this.enableJetpack(false);
         // create the Rocket Mouse sprite
-            // .play(AnimationKeys.PlayerNormal);
+        // .play(AnimationKeys.PlayerNormal);
         // this.player = scene.add.sprite(0, 0, TextureKeys.RocketMouse)
         //     .setOrigin(0.5, 1)
         //     .play(AnimationKeys.RocketMouseRun);
@@ -48,7 +48,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
         // use half width and 70% of height
         this.mousebody.setSize(this.player.width * imageScale, this.player.height * imageScale);
         // this.mousebody.setOffset(this.player.width * -0.25, -this.player.height*0.5 + 15);
-        this.mousebody.setOffset(-this.player.width*imageScale/2, this.player.height*-imageScale);
+        this.mousebody.setOffset(-this.player.width * imageScale / 2, this.player.height * -imageScale);
     }
 
     preUpdate() {
@@ -94,6 +94,10 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
 
     jump(active: boolean) {
         if (active) {
+            if ((this.mouseState == PlayerState.Killed)
+                || (this.mouseState == PlayerState.Dead)) {
+                return
+            }
             this.mousebody.setAccelerationY(-600);
             this.enableJetpack(true);
             // this.player.play(AnimationKeys.RocketMouseFly, true);
@@ -106,10 +110,13 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     }
 
     kill() {
+        console.log('killed');
         // don't do anything if not in RUNNING state
-        if (this.mouseState !== PlayerState.Normal) {
+        if ((this.mouseState == PlayerState.Killed)
+            || (this.mouseState == PlayerState.Dead)) {
             return
         }
+        console.log('killed2');
         // set state to KILLED
         this.mouseState = PlayerState.Killed
         // this.player.play(AnimationKeys.RocketMouseDead)

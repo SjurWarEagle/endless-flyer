@@ -13,7 +13,7 @@ export default class GameOver extends Phaser.Scene {
         const x = width * 0.5
         const y = height * 0.5
         // add the text with some styling
-        this.add.text(x, y, 'Press SPACE to Play Again', {
+        this.add.text(x, y, 'Press anything\n to \nplay again', {
             fontSize: '32px',
             color: '#FFFFFF',
             backgroundColor: '#000000',
@@ -26,10 +26,10 @@ export default class GameOver extends Phaser.Scene {
         if (this.game.input.activePointer.leftButtonDown()) {
             this.startGame();
         }
-        this.input.keyboard.once('keydown-SPACE', () => {
+        this.input.keyboard.once('keyup-SPACE', () => {
             this.startGame();
         });
-        this.input.on('pointerdown', () => {
+        this.input.on('pointerup', () => {
             this.startGame();
         })
     }

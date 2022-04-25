@@ -143,9 +143,10 @@ export default class Game extends Phaser.Scene {
 
         this.lifes--;
         this.liveDisplay.updateLifes(this.lifes);
-        //
-        // this.score -= 5;
-        // this.scoreLabel.text = `Score: ${this.score}`;
+
+        if (this.lifes <= 0) {
+            this.player.kill();
+        }
     }
 
     // noinspection JSUnusedLocalSymbols
@@ -321,12 +322,5 @@ export default class Game extends Phaser.Scene {
 
         // update the body x, y position from the GameObject
         body.updateFromGameObject()
-    }
-
-    private missedObstacle() {
-        this.lifes--;
-        if (this.lifes <= 0) {
-            // this.player.kill();
-        }
     }
 }
