@@ -9,7 +9,6 @@ const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
 	width: 800,
 	height: 640,
-	backgroundColor: '#2646c6',
 	scale: {
 		mode: Phaser.Scale.FIT,
 		// ...
@@ -18,7 +17,7 @@ const config: Phaser.Types.Core.GameConfig = {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
-			debug: true
+			// debug: true
 		}
 	},
 	scene: [Preloader, Game, GameOver]

@@ -5,7 +5,6 @@
 	"scripts": {
 		"start": "parcel src/index.html -p 8000",
 		"build": "parcel build src/index.html --out-dir dist",
-		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
 		"ncu": "ncu -x typescript -u ",
 		"git:add": "git add package.json package-lock.json",
@@ -14,8 +13,8 @@
 		"dependencies:install": "npm install",
 		"update:dependencies and build": "run-s ncu dependencies:install build git"
 	},
-	"author": "supertommy",
-	"license": "MIT",
+	"author": "Torsten Kunkel <git@tkunkel.de>",
+	"license": "GPL v2",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/ourcade/phaser3-parcel-template.git"
@@ -24,14 +23,14 @@
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "5.20.0",
 		"@typescript-eslint/parser": "5.20.0",
-		"npm-check-updates": "12.5.9",
-		"npm-run-all": "4.1.5",
-		"prettier": "2.6.2",
 		"eslint": "8.13.0",
 		"minimist": "1.2.6",
+		"npm-check-updates": "12.5.9",
+		"npm-run-all": "4.1.5",
 		"parcel-bundler": "1.12.5",
 		"parcel-plugin-clean-easy": "1.0.2",
 		"parcel-plugin-static-files-copy": "2.6.0",
+		"prettier": "2.6.2",
 		"typescript": "3.8.3"
 	},
 	"dependencies": {
