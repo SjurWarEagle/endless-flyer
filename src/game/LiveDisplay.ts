@@ -34,11 +34,11 @@ export default class LiveDisplay extends Phaser.GameObjects.Container {
     }
 
     private generateIcons() {
-        const width: number = 50;
-        const height: number = 50;
+        const width = 50;
+        const height = 50;
 
         const x: number = this.scene.scale.width - width * 1.5;
-        const y: number = 10;
+        const y = 10;
 
         // add them all to the Container
         for (let cnt = 0; cnt < this.maxLives; cnt++) {

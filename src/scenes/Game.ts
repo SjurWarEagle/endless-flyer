@@ -33,8 +33,6 @@ export default class Game extends Phaser.Scene {
         const height = this.scale.height;
         const width = this.scale.width;
 
-        const sizeEagle = 50;
-
         this.scale.displaySize.setAspectRatio(width / height);
         this.scale.refresh();
 
@@ -138,7 +136,7 @@ export default class Game extends Phaser.Scene {
         const player = obj1 as Phaser.Physics.Arcade.Sprite
         const eagle = obj2 as Phaser.Physics.Arcade.Sprite
 
-        if (!!eagle.getData('touched')) {
+        if (eagle.getData('touched')) {
             return;
         }
         eagle.body.enable=false;
@@ -226,7 +224,7 @@ export default class Game extends Phaser.Scene {
         // const height = this.scale.height;
 
         const scrollX = this.cameras.main.scrollX
-        const rightEdge = scrollX + this.scale.width
+        // const rightEdge = scrollX + this.scale.width
 
 
         this.eagles.children.each(child => {
