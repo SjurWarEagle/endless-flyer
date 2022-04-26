@@ -1,4 +1,4 @@
-import Phaser from 'phaser'
+import Phaser from 'phaser';
 import TextureKeys from "~/consts/TextureKeys";
 
 export default class LiveDisplay extends Phaser.GameObjects.Container {
@@ -9,7 +9,7 @@ export default class LiveDisplay extends Phaser.GameObjects.Container {
     private hearts: Phaser.GameObjects.Image[] = [];
 
     constructor(scene: Phaser.Scene) {
-        super(scene)
+        super(scene);
         this.myScene = scene;
 
         this.generateIcons();
@@ -27,8 +27,8 @@ export default class LiveDisplay extends Phaser.GameObjects.Container {
         // const topBody = this.top.body as Phaser.Physics.Arcade.StaticBody;
         // topBody.setCircle(topBody.width * 0.5);
 
-        scene.physics.add.existing(this, true)
-        const body = this.body as Phaser.Physics.Arcade.StaticBody
+        scene.physics.add.existing(this, true);
+        const body = this.body as Phaser.Physics.Arcade.StaticBody;
         //body.setSize(width, height)
         body.position.x = this.x + body.offset.x;
     }
@@ -92,7 +92,7 @@ export default class LiveDisplay extends Phaser.GameObjects.Container {
         this.hearts.forEach(heart => {
             heart.removedFromScene();
             heart.visible=false;
-        })
+        });
         this.generateIcons();
     }
 }

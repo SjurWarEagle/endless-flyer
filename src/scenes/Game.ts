@@ -1,7 +1,7 @@
-import Phaser from 'phaser'
+import Phaser from 'phaser';
 import SceneKeys from "~/consts/SceneKeys";
 import TextureKeys from '~/consts/TextureKeys';
-import RocketMouse from "~/game/RocketMouse";
+import PlayerBalloon from "~/game/player-balloon";
 import LiveDisplay from "~/game/LiveDisplay";
 import AnimationKeys from "~/consts/AnimationKeys";
 
@@ -9,12 +9,12 @@ export default class Game extends Phaser.Scene {
     private CNT_COINS = 10;
     private CNT_EAGLES = 4;
     // create the background class property
-    private player!: RocketMouse;
+    private player!: PlayerBalloon;
     private cloudsBig!: Phaser.GameObjects.TileSprite;
     private cloudsSmall!: Phaser.GameObjects.TileSprite;
     private coins!: Phaser.Physics.Arcade.StaticGroup;
 
-    private scoreLabel!: Phaser.GameObjects.Text
+    private scoreLabel!: Phaser.GameObjects.Text;
     private score = 0;
     private lifes = 3;
     private eagles!: Phaser.Physics.Arcade.StaticGroup;
@@ -26,7 +26,7 @@ export default class Game extends Phaser.Scene {
     }
 
     constructor() {
-        super(SceneKeys.Game)
+        super(SceneKeys.Game);
     }
 
     public create() {
@@ -46,7 +46,7 @@ export default class Game extends Phaser.Scene {
 
         this.liveDisplay = new LiveDisplay(this);
 
-        this.add.existing(this.liveDisplay)
+        this.add.existing(this.liveDisplay);
 
         this.coins = this.physics.add.staticGroup();
         this.spawnCoins();
@@ -55,7 +55,7 @@ export default class Game extends Phaser.Scene {
         this.spawnEagles();
 
         // add new RocketMouse
-        this.player = new RocketMouse(this, width * 0.25, height - 100)
+        this.player = new PlayerBalloon(this, width * 0.25, height - 100);
         this.add.existing(this.player);
 
         // error happens here
@@ -68,7 +68,7 @@ export default class Game extends Phaser.Scene {
             0, marginWorld, // x, y
             Number.MAX_SAFE_INTEGER,  // width
             height - 2 * marginWorld // height
-        )
+        );
 
         this.cameras.main.startFollow(this.player);
         this.cameras.main.followOffset.set(-width * 0.35, 0);
@@ -104,7 +104,7 @@ export default class Game extends Phaser.Scene {
             color: '#d3d2d2',
             shadow: {fill: true, blur: 2, offsetX: 2, offsetY: 2, color: '#000000'},
             // padding: {left: 15, right: 15, top: 10, bottom: 10}
-        }).setScrollFactor(0)
+        }).setScrollFactor(0);
 
         // this.liveLabel = this.add.text(10, 50, `Lives: ${this.lifes}`, {
         //     fontSize: '12px',
@@ -133,8 +133,8 @@ export default class Game extends Phaser.Scene {
     }
 
     private handleTouchedEagle(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
-        const player = obj1 as Phaser.Physics.Arcade.Sprite
-        const eagle = obj2 as Phaser.Physics.Arcade.Sprite
+        const player = obj1 as Phaser.Physics.Arcade.Sprite;
+        const eagle = obj2 as Phaser.Physics.Arcade.Sprite;
 
         if (eagle.getData('touched')) {
             return;
@@ -153,9 +153,9 @@ export default class Game extends Phaser.Scene {
     private handleCollectCoin(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
         // eslint-disable-next-line
         const player = obj1 as Phaser.Physics.Arcade.Sprite
-        const coin = obj2 as Phaser.Physics.Arcade.Sprite
+        const coin = obj2 as Phaser.Physics.Arcade.Sprite;
         // use the group to hide it
-        this.coins.killAndHide(coin)
+        this.coins.killAndHide(coin);
         // and turn off the physics body
         coin.body.enable = false;
         this.score++;
@@ -176,15 +176,15 @@ export default class Game extends Phaser.Scene {
                 coin.body.enable = false;
                 this.generateCoin();
             }
-        })
+        });
     }
 
     private spawnEagles() {
         this.eagles.children.each(child => {
-            const eagle = child as Phaser.Physics.Arcade.Sprite
-            this.coins.killAndHide(eagle)
-            eagle.body.enable = false
-        })
+            const eagle = child as Phaser.Physics.Arcade.Sprite;
+            this.coins.killAndHide(eagle);
+            eagle.body.enable = false;
+        });
         for (let cnt = 0; cnt < this.CNT_EAGLES; cnt++) {
             this.spawnEagle();
         }
@@ -194,8 +194,8 @@ export default class Game extends Phaser.Scene {
         const width = this.scale.width;
         const height = this.scale.height;
 
-        const scrollX = this.cameras.main.scrollX
-        const rightEdge = scrollX + this.scale.width
+        const scrollX = this.cameras.main.scrollX;
+        const rightEdge = scrollX + this.scale.width;
 
         const x = rightEdge + Phaser.Math.Between(0, 2 * width);
         const y = Phaser.Math.Between(50, height - 50);
@@ -211,11 +211,11 @@ export default class Game extends Phaser.Scene {
         const body = eagle.body as Phaser.Physics.Arcade.StaticBody;
         // body.setAccelerationY(-200);
         // body.setVelocityX(-20);
-        eagle.setVisible(true)
-        eagle.setActive(true)
+        eagle.setVisible(true);
+        eagle.setActive(true);
 
         // body.setCircle(body.width * 0.015)
-        body.enable = true
+        body.enable = true;
 
         body.updateFromGameObject();
     }
@@ -224,7 +224,7 @@ export default class Game extends Phaser.Scene {
         // const width = this.scale.width;
         // const height = this.scale.height;
 
-        const scrollX = this.cameras.main.scrollX
+        const scrollX = this.cameras.main.scrollX;
         // const rightEdge = scrollX + this.scale.width
 
 
@@ -287,10 +287,10 @@ export default class Game extends Phaser.Scene {
     private spawnCoins() {
         // make sure all coins are inactive and hidden
         this.coins.children.each(child => {
-            const coin = child as Phaser.Physics.Arcade.Sprite
-            this.coins.killAndHide(coin)
-            coin.body.enable = false
-        })
+            const coin = child as Phaser.Physics.Arcade.Sprite;
+            this.coins.killAndHide(coin);
+            coin.body.enable = false;
+        });
         const numCoins = Phaser.Math.Between(1, this.CNT_COINS);
 
         for (let i = 0; i < numCoins; ++i) {
@@ -299,8 +299,8 @@ export default class Game extends Phaser.Scene {
     }
 
     private generateCoin() {
-        const scrollX = this.cameras.main.scrollX
-        const rightEdge = scrollX + this.scale.width
+        const scrollX = this.cameras.main.scrollX;
+        const rightEdge = scrollX + this.scale.width;
         // start at 100 pixels past the right side of the screen
         const x = rightEdge + Phaser.Math.Between(100, 1000);
 
@@ -310,17 +310,17 @@ export default class Game extends Phaser.Scene {
             TextureKeys.Coin
         ) as Phaser.Physics.Arcade.Sprite;
 
-        const body = coin.body as Phaser.Physics.Arcade.StaticBody
+        const body = coin.body as Phaser.Physics.Arcade.StaticBody;
 
         // make sure coin is active and visible
-        coin.setVisible(true)
-        coin.setActive(true)
+        coin.setVisible(true);
+        coin.setActive(true);
 
         // enable and adjust physics body to be a circle
-        body.setCircle(body.width * 0.5)
-        body.enable = true
+        body.setCircle(body.width * 0.5);
+        body.enable = true;
 
         // update the body x, y position from the GameObject
-        body.updateFromGameObject()
+        body.updateFromGameObject();
     }
 }

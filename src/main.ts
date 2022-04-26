@@ -1,8 +1,9 @@
-import Phaser from 'phaser'
+import Phaser from 'phaser';
 
-import Game from './scenes/Game'
-import Preloader from './scenes/Preloader'
+import Game from './scenes/Game';
+import Preloader from './scenes/Preloader';
 import GameOver from "~/scenes/GameOver";
+import StartPage from "~/scenes/StartPage";
 
 const config: Phaser.Types.Core.GameConfig = {
 	parent: 'mygame',
@@ -18,10 +19,10 @@ const config: Phaser.Types.Core.GameConfig = {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
-			//debug: true
+			debug: true
 		}
 	},
-	scene: [Preloader, Game, GameOver]
-}
+	scene: [Preloader, Game, GameOver, StartPage]
+};
 
-export default new Phaser.Game(config)
+export default new Phaser.Game(config);

@@ -21,4 +21,4 @@ enum TextureKeys {
     EagleFly='eagle-fly',
 }
 
-export default TextureKeys
+export default TextureKeys;

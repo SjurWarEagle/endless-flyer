@@ -12,4 +12,4 @@ enum AnimationKeys {
     PlayerNormal = 'PlayerNormal',
 }
 
-export default AnimationKeys
+export default AnimationKeys;

@@ -10,6 +10,8 @@ module.exports = {
 		'plugin:@typescript-eslint/recommended'
 	],
 	rules: {
+		semi: "warn",
+		"no-extra-semi": "warn",
 		'@typescript-eslint/explicit-function-return-type': 0,
 		'@typescript-eslint/ban-ts-ignore': 0,
 		'@typescript-eslint/no-namespace': 2,

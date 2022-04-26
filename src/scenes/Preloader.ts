@@ -8,22 +8,15 @@ export default class Preloader extends Phaser.Scene {
 
 
     constructor() {
-        super(SceneKeys.Preloader)
+        super(SceneKeys.Preloader);
     }
 
     preload() {
         this.load.image(TextureKeys.Coin, 'house/object_coin.png');
 
-        // this.load.image(TextureKeys.Background, 'spaceship/bg_spaceship.png')
-        // this.load.image(TextureKeys.Background1, 'spaceship/bg_spaceship_1.png')
-        // this.load.image(TextureKeys.Background2, 'spaceship/bg_spaceship_2.png')
-        // this.load.image(TextureKeys.Background3, 'spaceship/bg_spaceship_3.png')
-        this.load.atlas(TextureKeys.RocketMouse, 'characters/rocket-mouse.png', 'characters/rocket-mouse.json')
+        this.load.atlas(TextureKeys.RocketMouse, 'characters/rocket-mouse.png', 'characters/rocket-mouse.json');
 
-        this.load.atlas(TextureKeys.EagleFly, 'characters/eagle/eagle.png', 'characters/eagle/eagle.json')
-
-        // this.load.image(TextureKeys.LaserEnd, 'house/object_laser_end.png');
-        // this.load.image(TextureKeys.LaserMiddle, 'house/object_laser.png');
+        this.load.atlas(TextureKeys.EagleFly, 'characters/eagle/eagle.png', 'characters/eagle/eagle.json');
 
         this.load.image(TextureKeys.Clouds, 'clouds/clouds-white.png');
         this.load.image(TextureKeys.CloudsSmall, 'clouds/clouds-white-small.png');
@@ -70,15 +63,15 @@ export default class Preloader extends Phaser.Scene {
             }]
         });
 
-        // // create the flames animation
-        // this.anims.create({
-        //     key: AnimationKeys.RocketFlamesOn,
-        //     frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,
-        //         {start: 1, end: 2, prefix: 'flame', suffix: '.png'}),
-        //     frameRate: 10,
-        //     repeat: -1
-        // })
+        // create the flames animation
+        this.anims.create({
+            key: AnimationKeys.RocketFlamesOn,
+            frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,
+                {start: 1, end: 2, prefix: 'flame', suffix: '.png'}),
+            frameRate: 10,
+            repeat: -1
+        });
 
-        this.scene.start(SceneKeys.Game);
+        this.scene.start(SceneKeys.StartPage);
     }
 }

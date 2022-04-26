@@ -4,7 +4,7 @@ import AnimationKeys from '../consts/AnimationKeys';
 import SceneKeys from "~/consts/SceneKeys";
 import {PlayerState} from "~/game/PlayerState";
 
-export default class RocketMouse extends Phaser.GameObjects.Container {
+export default class PlayerBalloon extends Phaser.GameObjects.Container {
     private flames: Phaser.GameObjects.Sprite;
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private player: Phaser.GameObjects.Image;
@@ -12,18 +12,21 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     private mousebody: Phaser.Physics.Arcade.Body;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
-        super(scene, x, y)
+        super(scene, x, y);
 
         const imageScale = 1 / 8;
         // const imageScale=0.25;
 
         // create the flames and play the animation
-        this.flames = scene.add.sprite(-63, -15, TextureKeys.RocketMouse)
-            .play(AnimationKeys.RocketFlamesOn);
         this.player = scene.add.image(0, 0, TextureKeys.PlayerNormal)
             // .setOrigin(0.25, 0.25)
             .setOrigin(0.5, 1)
-            .setScale(imageScale)
+            .setScale(imageScale);
+        this.flames = scene.add.sprite(0, -30, TextureKeys.RocketMouse)
+            .setOrigin(0, 1)
+            .setScale(0.25)
+            .setRotation(2.7)
+            .play(AnimationKeys.RocketFlamesOn);
 
         this.enableJetpack(false);
         // create the Rocket Mouse sprite
@@ -32,11 +35,11 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
         //     .setOrigin(0.5, 1)
         //     .play(AnimationKeys.RocketMouseRun);
         // add as child of Container
-        // this.add(this.flames);
+        this.add(this.flames);
         this.add(this.player);
 
         scene.physics.add.existing(this);
-        this.body = this.body as Phaser.Physics.Arcade.Body
+        this.body = this.body as Phaser.Physics.Arcade.Body;
 
         // adjust physics body size and offset
         this.mousebody = this.body as Phaser.Physics.Arcade.Body;
@@ -52,7 +55,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     }
 
     preUpdate() {
-        this.body = this.body as Phaser.Physics.Arcade.Body
+        this.body = this.body as Phaser.Physics.Arcade.Body;
         switch (this.mouseState) {
             // move all previous code into this case
             case PlayerState.Normal: {
@@ -67,7 +70,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
                     // this.player.play(AnimationKeys.RocketMouseFall, true);
                 }
                 // don't forget the break statement
-                break
+                break;
             }
             case PlayerState.Killed: {
                 // reduce velocity to 99% of current value
@@ -96,7 +99,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
         if (active) {
             if ((this.mouseState == PlayerState.Killed)
                 || (this.mouseState == PlayerState.Dead)) {
-                return
+                return;
             }
             this.mousebody.setAccelerationY(-600);
             this.enableJetpack(true);
@@ -110,19 +113,17 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     }
 
     kill() {
-        console.log('killed');
         // don't do anything if not in RUNNING state
         if ((this.mouseState == PlayerState.Killed)
             || (this.mouseState == PlayerState.Dead)) {
-            return
+            return;
         }
-        console.log('killed2');
         // set state to KILLED
-        this.mouseState = PlayerState.Killed
+        this.mouseState = PlayerState.Killed;
         // this.player.play(AnimationKeys.RocketMouseDead)
-        const body = this.body as Phaser.Physics.Arcade.Body
-        body.setAccelerationY(0)
-        body.setVelocity(400, 0)
-        this.enableJetpack(false)
+        const body = this.body as Phaser.Physics.Arcade.Body;
+        body.setAccelerationY(0);
+        body.setVelocity(400, 0);
+        this.enableJetpack(false);
     }
 }
