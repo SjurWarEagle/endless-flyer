@@ -19,6 +19,7 @@ enum TextureKeys {
     IslandHill='IslandHill',
 
     EagleFly='eagle-fly',
+    Bubble='bubble',
 }
 
 export default TextureKeys;

@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser, {BlendModes} from 'phaser';
 import TextureKeys from '../consts/TextureKeys';
 import AnimationKeys from '../consts/AnimationKeys';
 import SceneKeys from "~/consts/SceneKeys";
@@ -10,6 +10,7 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
     private player: Phaser.GameObjects.Image;
     private mouseState = PlayerState.Normal;
     private mousebody: Phaser.Physics.Arcade.Body;
+    private overlay: any;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
@@ -39,7 +40,7 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
         this.add(this.player);
 
         scene.physics.add.existing(this);
-        this.body = this.body as Phaser.Physics.Arcade.Body;
+        // this.body = this.body as Phaser.Physics.Arcade.Body;
 
         // adjust physics body size and offset
         this.mousebody = this.body as Phaser.Physics.Arcade.Body;
@@ -52,10 +53,19 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
         this.mousebody.setSize(this.player.width * imageScale, this.player.height * imageScale);
         // this.mousebody.setOffset(this.player.width * -0.25, -this.player.height*0.5 + 15);
         this.mousebody.setOffset(-this.player.width * imageScale / 2, this.player.height * -imageScale);
+
+        this.overlay = scene.add.graphics({
+            x: 0,
+            y: 0
+        })
+            .fillStyle(0xff0000, 0.75)
+            .fillEllipse(0, -65, 60, 80)
+            // .fillRect(-30,-100,60,100)
+            .setAlpha(0)
+        this.add(this.overlay);
     }
 
     preUpdate() {
-        this.body = this.body as Phaser.Physics.Arcade.Body;
         switch (this.mouseState) {
             // move all previous code into this case
             case PlayerState.Normal: {
@@ -64,6 +74,7 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
                 // } else {
                 //     // this.jump(false);
                 // }
+                this.body = this.body as Phaser.Physics.Arcade.Body;
                 if (this.body.blocked.down) {
                     // this.player.play(AnimationKeys.RocketMouseRun, true);
                 } else if (this.body.velocity.y > 0) {
@@ -112,6 +123,20 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
 
     }
 
+    hit() {
+        // this.mousebody.set
+        // this.player.setTint(0xffff00);
+        this.scene.tweens.add({
+            targets: this.overlay,
+            alpha: 0.75,
+            ease: 'Cubic.easeOut',
+            duration: 100,
+            repeat: 0,
+            yoyo: true
+        })
+
+    }
+
     kill() {
         // don't do anything if not in RUNNING state
         if ((this.mouseState == PlayerState.Killed)
@@ -125,5 +150,9 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
         body.setAccelerationY(0);
         body.setVelocity(400, 0);
         this.enableJetpack(false);
+    }
+
+    setVisible(value: boolean): this {
+        return super.setVisible(value);
     }
 }

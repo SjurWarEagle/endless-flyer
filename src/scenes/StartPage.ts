@@ -70,6 +70,7 @@ export default class StartPage extends Phaser.Scene {
         this.input.on('pointerup', () => {
             this.startGame();
         });
+        this.startGame();
     }
 
     startGame() {

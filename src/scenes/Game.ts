@@ -4,6 +4,8 @@ import TextureKeys from '~/consts/TextureKeys';
 import PlayerBalloon from "~/game/player-balloon";
 import LiveDisplay from "~/game/LiveDisplay";
 import AnimationKeys from "~/consts/AnimationKeys";
+import GameObject = Phaser.GameObjects.GameObject;
+import {LootBubble} from "~/game/loot-bubble";
 
 export default class Game extends Phaser.Scene {
     private CNT_COINS = 10;
@@ -12,7 +14,7 @@ export default class Game extends Phaser.Scene {
     private player!: PlayerBalloon;
     private cloudsBig!: Phaser.GameObjects.TileSprite;
     private cloudsSmall!: Phaser.GameObjects.TileSprite;
-    private coins!: Phaser.Physics.Arcade.StaticGroup;
+    private bubbles: LootBubble[] = [];
 
     private scoreLabel!: Phaser.GameObjects.Text;
     private score = 0;
@@ -48,8 +50,8 @@ export default class Game extends Phaser.Scene {
 
         this.add.existing(this.liveDisplay);
 
-        this.coins = this.physics.add.staticGroup();
-        this.spawnCoins();
+        // this.bubbles = this.physics.add.staticGroup();
+        this.spawnBubbles();
 
         this.eagles = this.physics.add.staticGroup();
         this.spawnEagles();
@@ -84,7 +86,7 @@ export default class Game extends Phaser.Scene {
         //
 
         this.physics.add.overlap(
-            this.coins,
+            this.bubbles,
             this.player,
             this.handleCollectCoin,
             undefined,
@@ -133,15 +135,16 @@ export default class Game extends Phaser.Scene {
     }
 
     private handleTouchedEagle(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
-        const player = obj1 as Phaser.Physics.Arcade.Sprite;
+        //const player = obj1 as Phaser.Physics.Arcade.Sprite;
         const eagle = obj2 as Phaser.Physics.Arcade.Sprite;
 
         if (eagle.getData('touched')) {
             return;
         }
-        eagle.body.enable=false;
+        eagle.body.enable = false;
 
         this.lifes--;
+        this.player.hit();
         this.liveDisplay.updateLifes(this.lifes);
 
         if (this.lifes <= 0) {
@@ -152,37 +155,26 @@ export default class Game extends Phaser.Scene {
     // noinspection JSUnusedLocalSymbols
     private handleCollectCoin(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
         // eslint-disable-next-line
-        const player = obj1 as Phaser.Physics.Arcade.Sprite
-        const coin = obj2 as Phaser.Physics.Arcade.Sprite;
+        const bubble = obj1 as Phaser.Physics.Arcade.Sprite;
+        const player = obj2 as Phaser.Physics.Arcade.Sprite
         // use the group to hide it
-        this.coins.killAndHide(coin);
+        //console.log(player);
+        //console.log(bubble);
+        //FIXME this.coins.killAndHide(coin);
+
         // and turn off the physics body
-        coin.body.enable = false;
+        bubble.body.enable = false;
+        bubble.setVisible(false);
+
         this.score++;
         this.scoreLabel.text = `Score: ${this.score}`;
-        this.generateCoin();
     }
 
-    private wrapCoins() {
-        const scrollX = this.cameras.main.scrollX;
-
-        this.coins.children.each(child => {
-            const coin = child as Phaser.Physics.Arcade.Sprite;
-            const body = coin.body as Phaser.Physics.Arcade.StaticBody;
-            const width = body.width;
-
-            if (coin.x + width < scrollX) {
-                this.coins.killAndHide(coin);
-                coin.body.enable = false;
-                this.generateCoin();
-            }
-        });
-    }
 
     private spawnEagles() {
         this.eagles.children.each(child => {
             const eagle = child as Phaser.Physics.Arcade.Sprite;
-            this.coins.killAndHide(eagle);
+            this.eagles.killAndHide(eagle);
             eagle.body.enable = false;
         });
         for (let cnt = 0; cnt < this.CNT_EAGLES; cnt++) {
@@ -200,11 +192,13 @@ export default class Game extends Phaser.Scene {
         const x = rightEdge + Phaser.Math.Between(0, 2 * width);
         const y = Phaser.Math.Between(50, height - 50);
 
-        const eagle = (this.eagles.get(x, y, TextureKeys.EagleFly) as Phaser.Physics.Arcade.Sprite)
+        let eagle;
+        eagle = (this.eagles.get(x, y, TextureKeys.EagleFly) as Phaser.Physics.Arcade.Sprite)
             .setFlipX(true)
             .setOrigin(0.5, 1)
             .setScale(0.25)
             .play(AnimationKeys.EagleFly);
+        // this.isOverlappingExistingEntry(eagle);
 
         eagle.setData('touched', false);
 
@@ -273,54 +267,101 @@ export default class Game extends Phaser.Scene {
         // }
     }
 
+    private wrapBubbles() {
+        // const width = this.scale.width;
+        // const height = this.scale.height;
+
+        const scrollX = this.cameras.main.scrollX;
+        const rightEdge = scrollX + this.scale.width
+
+
+        this.bubbles.forEach(bubble => {
+            const body = bubble.body as Phaser.Physics.Arcade.StaticBody;
+            const width = body.width;
+
+
+            if (body.x + width < scrollX) {
+                const x = rightEdge + Phaser.Math.Between(100, 1000);
+                const y = Phaser.Math.Between(100, this.scale.height - 100);
+                body.x = x;
+                body.y = y;
+
+                body.enable = true;
+                bubble.setVisible(true);
+
+                bubble.initSpeed();
+            }
+        });
+    }
+
     update() {
         // scroll the background
-        // this.background.setTilePosition(this.cameras.main.scrollX);
         this.cloudsBig.setTilePosition(this.cameras.main.scrollX * 0.5);
         this.cloudsSmall.setTilePosition(this.cameras.main.scrollX * 0.25);
 
-        // this.wrapLaserObstacle();
-        this.wrapCoins();
         this.wrapEagle();
+        this.wrapBubbles();
     }
 
-    private spawnCoins() {
-        // make sure all coins are inactive and hidden
-        this.coins.children.each(child => {
-            const coin = child as Phaser.Physics.Arcade.Sprite;
-            this.coins.killAndHide(coin);
-            coin.body.enable = false;
-        });
-        const numCoins = Phaser.Math.Between(1, this.CNT_COINS);
-
-        for (let i = 0; i < numCoins; ++i) {
-            this.generateCoin();
+    private spawnBubbles() {
+        for (let i = 0; i < 5; ++i) {
+            this.generateBubble();
         }
     }
 
-    private generateCoin() {
+    private generateBubble() {
+        // console.log('generateBubble');
         const scrollX = this.cameras.main.scrollX;
         const rightEdge = scrollX + this.scale.width;
-        // start at 100 pixels past the right side of the screen
+
         const x = rightEdge + Phaser.Math.Between(100, 1000);
+        const y = Phaser.Math.Between(100, this.scale.height - 100);
 
-        const coin = this.coins.get(
-            x,
-            Phaser.Math.Between(100, this.scale.height - 100),
-            TextureKeys.Coin
-        ) as Phaser.Physics.Arcade.Sprite;
+        const bubble = new LootBubble(this, x, y);
+        // this.add.existing(bubble);
 
-        const body = coin.body as Phaser.Physics.Arcade.StaticBody;
-
-        // make sure coin is active and visible
-        coin.setVisible(true);
-        coin.setActive(true);
-
-        // enable and adjust physics body to be a circle
-        body.setCircle(body.width * 0.5);
-        body.enable = true;
-
-        // update the body x, y position from the GameObject
-        body.updateFromGameObject();
+        this.bubbles.push(bubble);
     }
+
+    // private generateCoin() {
+    //     const scrollX = this.cameras.main.scrollX;
+    //     const rightEdge = scrollX + this.scale.width;
+    //     // start at 100 pixels past the right side of the screen
+    //     const x = rightEdge + Phaser.Math.Between(100, 1000);
+    //
+    //     const coin = this.coins.get(
+    //         x,
+    //         Phaser.Math.Between(100, this.scale.height - 100),
+    //         TextureKeys.Coin
+    //     ) as Phaser.Physics.Arcade.Sprite;
+    //
+    //     const body = coin.body as Phaser.Physics.Arcade.StaticBody;
+    //
+    //     // make sure coin is active and visible
+    //     coin.setVisible(true);
+    //     coin.setActive(true);
+    //
+    //     // enable and adjust physics body to be a circle
+    //     body.setCircle(body.width * 0.5);
+    //     body.enable = true;
+    //
+    //     // update the body x, y position from the GameObject
+    //     body.updateFromGameObject();
+    // }
+
+    // private isOverlappingExistingEntry(eagle: GameObject): boolean {
+    //     const matchFound = false;
+    //     this.coins.children.each(coin => {
+    //         if ((eagle.body.position.x === coin.body.position.x)
+    //             && (eagle.body.position.y === coin.body.position.y)) {
+    //             // same object
+    //             return;
+    //         }
+    //         const newX1 = eagle.body.position.x;
+    //         const newX2 = eagle.body.position.x + eagle.body.gameObject.width;
+    //         const existingX1 = eagle.body.position.x;
+    //         const existingX2 = eagle.body.position.x + eagle.body.gameObject.width;
+    //     });
+    //     return false;
+    // }
 }

@@ -17,6 +17,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.atlas(TextureKeys.RocketMouse, 'characters/rocket-mouse.png', 'characters/rocket-mouse.json');
 
         this.load.atlas(TextureKeys.EagleFly, 'characters/eagle/eagle.png', 'characters/eagle/eagle.json');
+        this.load.atlas(TextureKeys.Bubble, 'characters/bubble/bubble.png', 'characters/bubble/bubble.json');
 
         this.load.image(TextureKeys.Clouds, 'clouds/clouds-white.png');
         this.load.image(TextureKeys.CloudsSmall, 'clouds/clouds-white-small.png');
@@ -46,29 +47,27 @@ export default class Preloader extends Phaser.Scene {
             repeat: -1 // -1 to loop forever
         });
 
-        // new fall animation
-        this.anims.create({
-            key: AnimationKeys.RocketMouseFall,
-            frames: [{
-                key: TextureKeys.RocketMouse,
-                frame: 'rocketmouse_fall01.png'
-            }]
-        });
-
         this.anims.create({
             key: AnimationKeys.PlayerNormal,
             frames: [{
                 key: TextureKeys.PlayerNormal,
-                frame: 'PlayerNormal'
+                frame: 0
             }]
         });
 
-        // create the flames animation
         this.anims.create({
             key: AnimationKeys.RocketFlamesOn,
             frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,
                 {start: 1, end: 2, prefix: 'flame', suffix: '.png'}),
             frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: AnimationKeys.Bubble,
+            frames: this.anims.generateFrameNames(TextureKeys.Bubble,
+                {start: 1, end: 30, zeroPad: 2, prefix: 'Bubble', suffix: ''}),
+            frameRate: 20,
             repeat: -1
         });
 

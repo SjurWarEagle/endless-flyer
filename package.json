@@ -15,12 +15,7 @@
 		"update:dependencies and build": "run-s ncu dependencies:install build git"
 	},
 	"author": "Torsten Kunkel <git@tkunkel.de>",
-	"license": "GPL v2",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ourcade/phaser3-parcel-template.git"
-	},
-	"homepage": "https://github.com/ourcade/phaser3-parcel-template",
+	"license": "MIT",
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "5.21.0",
 		"@typescript-eslint/parser": "5.21.0",
