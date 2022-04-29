@@ -1,4 +1,4 @@
-import Phaser, {BlendModes} from 'phaser';
+import Phaser from 'phaser';
 import TextureKeys from '../consts/TextureKeys';
 import AnimationKeys from '../consts/AnimationKeys';
 import SceneKeys from "~/consts/SceneKeys";
@@ -61,7 +61,7 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
             .fillStyle(0xff0000, 0.75)
             .fillEllipse(0, -65, 60, 80)
             // .fillRect(-30,-100,60,100)
-            .setAlpha(0)
+            .setAlpha(0);
         this.add(this.overlay);
     }
 
@@ -133,7 +133,7 @@ export default class PlayerBalloon extends Phaser.GameObjects.Container {
             duration: 100,
             repeat: 0,
             yoyo: true
-        })
+        });
 
     }
 

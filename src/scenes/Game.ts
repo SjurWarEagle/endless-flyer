@@ -156,7 +156,7 @@ export default class Game extends Phaser.Scene {
     private handleCollectCoin(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
         // eslint-disable-next-line
         const bubble = obj1 as Phaser.Physics.Arcade.Sprite;
-        const player = obj2 as Phaser.Physics.Arcade.Sprite
+        const player = obj2 as Phaser.Physics.Arcade.Sprite;
         // use the group to hide it
         //console.log(player);
         //console.log(bubble);
@@ -192,8 +192,7 @@ export default class Game extends Phaser.Scene {
         const x = rightEdge + Phaser.Math.Between(0, 2 * width);
         const y = Phaser.Math.Between(50, height - 50);
 
-        let eagle;
-        eagle = (this.eagles.get(x, y, TextureKeys.EagleFly) as Phaser.Physics.Arcade.Sprite)
+        const eagle = (this.eagles.get(x, y, TextureKeys.EagleFly) as Phaser.Physics.Arcade.Sprite)
             .setFlipX(true)
             .setOrigin(0.5, 1)
             .setScale(0.25)
@@ -272,7 +271,7 @@ export default class Game extends Phaser.Scene {
         // const height = this.scale.height;
 
         const scrollX = this.cameras.main.scrollX;
-        const rightEdge = scrollX + this.scale.width
+        const rightEdge = scrollX + this.scale.width;
 
 
         this.bubbles.forEach(bubble => {

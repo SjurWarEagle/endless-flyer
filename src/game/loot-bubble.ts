@@ -13,11 +13,11 @@ export class LootBubble extends Phaser.GameObjects.Container {
         const bubble = scene.add.sprite(width / 2, height / 2, TextureKeys.Bubble)
             .setDisplaySize(width, height)
             //TODO .setOrigin(-0.3, -0.3)
-            .play(AnimationKeys.Bubble)
+            .play(AnimationKeys.Bubble);
 
 
         const coin = scene.add.sprite(width / 2, height / 2, TextureKeys.Coin)
-            .setDisplaySize(width * 0.75, height * 0.75)
+            .setDisplaySize(width * 0.75, height * 0.75);
         //TODO .setOrigin(-0.3, -0.3)
 
         this.add(coin);
